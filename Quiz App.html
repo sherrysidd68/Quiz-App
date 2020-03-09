@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Application in Javascript</title>
+</head>
+<style>
+    body{
+        align: center;
+        font-size: 20px;
+        font-family: sans-serif;
+        color: #333;
+    }
+    .question{
+        font-weight: 600;
+    }
+    .answers {
+        margin-bottom: 20px;
+    }
+    #submit{
+        font-family: sans-serif;
+        font-size: 20px;
+        background-color: #99922e;
+        color: #fff;
+        border: 0px;
+        border-radius: 3px;
+        padding: 20px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+    #submit:hover{
+        background-color: #aaa760;
+    }
+</style>
+<body align="center">
+<br/>
+<br/>
+<div id="quiz"></div>
+<button id="submit">Show Results</button>
+<div id="results"></div>
+</body>
+
+<script>
+    var myQuestions = [
+        {
+            question: "What is Javascript?",
+            answers: {
+                a: 'Programming Language',
+                b: 'Scripting Language',
+                c: 'Playing Language'
+            },
+            correctAnswer: 'b'
+        },
+        {
+            question: "What does HTML stand for?",
+            answers: {
+                a: 'Hypertext Markup Language',
+                b: 'Hypertext Makeup Language',
+                c: 'Hyper Protocol Markup Language'
+            },
+            correctAnswer: 'a'
+        },
+        {
+            question: "What does CSS stands for?",
+            answers: {
+                a: 'Cascading Sky Sheet',
+                b: 'Cascading Style Sheep',
+                c: 'Cascading Style Sheet'
+            },
+            correctAnswer: 'c'
+        }
+    ];
+    var quizContainer = document.getElementById('quiz');
+    var resultsContainer = document.getElementById('results');
+    var submitButton = document.getElementById('submit');
+    generateQuiz(myQuestions, quizContainer, resultsContainer, submitButton);
+    function generateQuiz(questions, quizContainer, resultsContainer, submitButton){
+
+        function showQuestions(questions, quizContainer)
+        {
+            var output = [];
+            var answers;
+            for(var i=0; i<questions.length; i++)
+            {
+                answers = [];
+                for(letter in questions[i].answers)
+                {
+                    answers.push(
+                        '<label>'
+                        + '<input type="radio" name="question'+i+'" value="'+letter+'">'
+                        + letter + ': '
+                        + questions[i].answers[letter]
+                        + '</label>'
+                    );
+                }
+                  output.push
+                (
+                    '<div class="question">' + questions[i].question + '</div>'
+                    + '<div class="answers">' + answers.join('') + '</div>'
+                );
+            }
+            quizContainer.innerHTML = output.join('');
+        }
+        function showResults(questions, quizContainer, resultsContainer)
+        {
+            var answerContainers = quizContainer.querySelectorAll('.answers');
+            var userAnswer = '';
+            var numCorrect = 0;
+            for(var i=0; i<questions.length; i++)
+            {
+                userAnswer = (answerContainers[i].querySelector('input[name=question'+i+']:checked')||{}).value;
+                if(userAnswer===questions[i].correctAnswer)
+                {
+                    numCorrect++;
+                }
+            }
+            resultsContainer.innerHTML = numCorrect + ' out of ' + questions.length;
+        }
+        showQuestions(questions, quizContainer);
+        submitButton.onclick = function(){
+        showResults(questions, quizContainer, resultsContainer);
+        }
+    }
+
+</script>
+
+</html>
